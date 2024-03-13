@@ -1,0 +1,448 @@
+Program.Sub.ScreenSU.Start
+Gui.FormCustChangeReport..Create
+Gui.FormCustChangeReport..Caption("Customer Changes")
+Gui.FormCustChangeReport..Size(4185,7380)
+Gui.FormCustChangeReport..MinX(0)
+Gui.FormCustChangeReport..MinY(0)
+Gui.FormCustChangeReport..Position(0,0)
+Gui.FormCustChangeReport..BackColor(-2147483633)
+Gui.FormCustChangeReport..MaxButton(False)
+Gui.FormCustChangeReport..MousePointer(0)
+Gui.FormCustChangeReport..Sizeable(False)
+Gui.FormCustChangeReport..Event(UnLoad,FormCustChangeReport_UnLoad)
+Gui.FormCustChangeReport.lblDateRange.Create(Label,"Date Range:",True,1050,255,0,1530,120,True,0,"Arial",8,-2147483633,0)
+Gui.FormCustChangeReport.lblDateFrom.Create(Label,"From:",True,585,255,0,0,435,True,0,"Arial",8,-2147483633,0)
+Gui.FormCustChangeReport.lblDateTo.Create(Label,"To: ",True,1935,255,0,2100,435,True,0,"Arial",8,-2147483633,0)
+Gui.FormCustChangeReport.dtpFrom.Create(DatePicker)
+Gui.FormCustChangeReport.dtpFrom.Size(1935,285)
+Gui.FormCustChangeReport.dtpFrom.Position(0,630)
+Gui.FormCustChangeReport.dtpTo.Create(DatePicker)
+Gui.FormCustChangeReport.dtpTo.Size(1935,285)
+Gui.FormCustChangeReport.dtpTo.Position(2100,630)
+Gui.FormCustChangeReport.chkAllDates.Create(CheckBox)
+Gui.FormCustChangeReport.chkAllDates.Size(1560,360)
+Gui.FormCustChangeReport.chkAllDates.Position(1500,975)
+Gui.FormCustChangeReport.chkAllDates.Caption("All Dates")
+Gui.FormCustChangeReport.chkAllDates.Event(Click,chkAllDates_Click)
+Gui.FormCustChangeReport.lblCustomer.Create(Label,"Customer:",True,855,255,0,1605,1395,True,0,"Arial",8,-2147483633,0)
+Gui.FormCustChangeReport.lblCustFrom.Create(Label,"From: ",True,720,255,0,195,1695,True,0,"Arial",8,-2147483633,0)
+Gui.FormCustChangeReport.lblCustTo.Create(Label,"To: ",True,345,255,0,2370,1695,True,0,"Arial",8,-2147483633,0)
+Gui.FormCustChangeReport.txtCustFrom.Create(TextBox,"",True,1215,300,0,195,1905,True,0,"Arial",8,-2147483643,1)
+Gui.FormCustChangeReport.txtCustTo.Create(TextBox,"",True,1215,300,0,2370,1905,True,0,"Arial",8,-2147483643,1)
+Gui.FormCustChangeReport.cmdCustFrom.Create(Button)
+Gui.FormCustChangeReport.cmdCustFrom.Size(360,360)
+Gui.FormCustChangeReport.cmdCustFrom.Position(1455,1875)
+Gui.FormCustChangeReport.cmdCustFrom.Caption("^")
+Gui.FormCustChangeReport.cmdCustFrom.Event(Click,cmdCustFrom_Click)
+Gui.FormCustChangeReport.cmdCustTo.Create(Button)
+Gui.FormCustChangeReport.cmdCustTo.Size(360,360)
+Gui.FormCustChangeReport.cmdCustTo.Position(3630,1875)
+Gui.FormCustChangeReport.cmdCustTo.Caption("^")
+Gui.FormCustChangeReport.cmdCustTo.Event(Click,cmdCustTo_Click)
+Gui.FormCustChangeReport.gsgcCustomers.Create(GsGridControl)
+Gui.FormCustChangeReport.gsgcCustomers.Size(4065,2790)
+Gui.FormCustChangeReport.gsgcCustomers.Position(0,2295)
+Gui.FormCustChangeReport.cmdAdd.Create(Button)
+Gui.FormCustChangeReport.cmdAdd.Size(990,375)
+Gui.FormCustChangeReport.cmdAdd.Position(840,5130)
+Gui.FormCustChangeReport.cmdAdd.Caption("Add")
+Gui.FormCustChangeReport.cmdAdd.Event(Click,cmdAdd_Click)
+Gui.FormCustChangeReport.cmdRemove.Create(Button)
+Gui.FormCustChangeReport.cmdRemove.Size(990,375)
+Gui.FormCustChangeReport.cmdRemove.Position(2085,5130)
+Gui.FormCustChangeReport.cmdRemove.Caption("Remove")
+Gui.FormCustChangeReport.cmdRemove.Event(Click,cmdRemove_Click)
+Gui.FormCustChangeReport.chkAllCustomers.Create(CheckBox)
+Gui.FormCustChangeReport.chkAllCustomers.Size(1560,360)
+Gui.FormCustChangeReport.chkAllCustomers.Position(1290,5550)
+Gui.FormCustChangeReport.chkAllCustomers.Caption("All Customers")
+Gui.FormCustChangeReport.chkAllCustomers.Event(Click,chkAllCustomers_Click)
+Gui.FormCustChangeReport.ddlFields.Create(DropDownList)
+Gui.FormCustChangeReport.ddlFields.Size(4005,330)
+Gui.FormCustChangeReport.ddlFields.Position(30,6240)
+Gui.FormCustChangeReport.lblFields.Create(Label,"Fields: ",True,585,255,0,1650,5970,True,0,"Arial",8,-2147483633,0)
+Gui.FormCustChangeReport.cmdPrint.Create(Button)
+Gui.FormCustChangeReport.cmdPrint.Size(990,375)
+Gui.FormCustChangeReport.cmdPrint.Position(1440,6645)
+Gui.FormCustChangeReport.cmdPrint.Caption("Print")
+Gui.FormCustChangeReport.cmdPrint.Event(Click,cmdPrint_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+	
+'GCG_5301_CustomerChangesReport.g2u
+'Trey S
+'For Controlled Fluids, Inc.
+'10/22/2018
+'Report for ARC 5129
+
+F.Intrinsic.Control.CallSub(PopulateDropDown)
+F.Intrinsic.Control.CallSub(LoadGrid)
+GUI.FormCustChangeReport..Show
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.Main.End
+
+Program.Sub.LoadGrid.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'load the datatable and grid for selected customer ranges
+F.Data.DataTable.Create("dtCustomers", True)
+F.Data.DataTable.AddColumn("dtCustomers", "From", "String")
+F.Data.DataTable.AddColumn("dtCustomers", "To", "String")
+
+GUI.FormCustChangeReport.gsgcCustomers.AddGridviewFromDatatable("gvCustomers", "dtCustomers")
+
+GUI.FormCustChangeReport.gsgcCustomers.SetColumnProperty("gvCustomers", "From", "HeaderFontBold", True)
+GUI.FormCustChangeReport.gsgcCustomers.SetColumnProperty("gvCustomers", "From", "AllowEdit", False)
+GUI.FormCustChangeReport.gsgcCustomers.SetColumnProperty("gvCustomers", "From", "ReadOnly", True)
+
+GUI.FormCustChangeReport.gsgcCustomers.SetColumnProperty("gvCustomers", "To", "HeaderFontBold", True)
+GUI.FormCustChangeReport.gsgcCustomers.SetColumnProperty("gvCustomers", "To", "AllowEdit", False)
+GUI.FormCustChangeReport.gsgcCustomers.SetColumnProperty("gvCustomers", "To", "ReadOnly", True)
+
+GUI.FormCustChangeReport.gsgcCustomers.SetGridviewProperty("gvCustomers", "MultiSelect", False)
+
+GUI.FormCustChangeReport.gsgcCustomers.MainView("gvCustomers")
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.LoadGrid.End
+
+Program.Sub.PopulateDropDown.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'add fields to drop down
+GUI.FormCustChangeReport.ddlFields.AddItem("All Fields")
+GUI.FormCustChangeReport.ddlFields.AddItem("Bill To")
+GUI.FormCustChangeReport.ddlFields.AddItem("Ship To")
+GUI.FormCustChangeReport.ddlFields.AddItem("Salesperson")
+GUI.FormCustChangeReport.ddlFields.AddItem("Credit Limit")
+GUI.FormCustChangeReport.ddlFields.AddItem("Terms")
+GUI.FormCustChangeReport.ddlFields.AddItem("Commission")
+GUI.FormCustChangeReport.ddlFields.AddItem("Credit Hold")
+GUI.FormCustChangeReport.ddlFields.AddItem("Shipping Hold")
+GUI.FormCustChangeReport.ddlFields.AddItem("Buying Group")
+
+GUI.FormCustChangeReport.ddlFields.ListIndex(0)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.PopulateDropDown.End
+
+Program.Sub.FormCustChangeReport_UnLoad.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'end
+F.Intrinsic.Control.End
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.FormCustChangeReport_UnLoad.End
+
+Program.Sub.chkAllDates_Click.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'toggle controls
+V.Local.bEnable.Declare(Boolean)
+V.Local.bEnable.Set(V.Screen.FormCustChangeReport!chkAllDates.CheckedAsBoolean)
+GUI.FormCustChangeReport.dtpFrom.Enabled(V.Local.bEnable.Not)
+GUI.FormCustChangeReport.dtpTo.Enabled(V.Local.bEnable.Not)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.chkAllDates_Click.End
+
+Program.Sub.cmdCustFrom_Click.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'open the customer browser, write the selection to the text box
+V.Local.sCustomer.Declare(String)
+F.Intrinsic.UI.Browser(225, "", V.Local.sCustomer)
+
+F.Intrinsic.Control.If(V.Local.sCustomer.IsCancel)
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Else
+	F.Intrinsic.String.Split(V.Local.sCustomer, "*!*", V.Local.sCustomer)
+	GUI.FormCustChangeReport.txtCustFrom.Text(V.Local.sCustomer(0).Trim)
+	GUI.FormCustChangeReport.txtCustTo.Text(V.Local.sCustomer(0).Trim)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdCustFrom_Click.End
+
+Program.Sub.cmdCustTo_Click.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'open the customer browser, write the selection to the text box
+V.Local.sCustomer.Declare(String)
+F.Intrinsic.UI.Browser(225, "", V.Local.sCustomer)
+
+F.Intrinsic.Control.If(V.Local.sCustomer.IsCancel)
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Else
+	F.Intrinsic.String.Split(V.Local.sCustomer, "*!*", V.Local.sCustomer)
+	GUI.FormCustChangeReport.txtCustTo.Text(V.Local.sCustomer(0).Trim)
+	F.Intrinsic.Control.If(V.Screen.FormCustChangeReport!txtCustFrom.Text.Trim, =, "")
+		GUI.FormCustChangeReport.txtCustFrom.Text(V.Local.sCustomer(0).Trim)		
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdCustTo_Click.End
+
+Program.Sub.cmdAdd_Click.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'add the row from the text boxes
+V.Local.sFilter.Declare(String)
+F.Intrinsic.Control.If(V.Screen.FormCustChangeReport!txtCustFrom.Text.Trim, !=, "", and, V.Screen.FormCustChangeReport!txtCustTo.Text.Trim, !=, "")
+	F.Intrinsic.String.Build("From = '{0}' and To = '{1}'", V.Screen.FormCustChangeReport!txtCustFrom.Text.Trim, V.Screen.FormCustChangeReport!txtCustTo.Text.Trim, V.Local.sFilter)
+	F.Data.DataTable.Select("dtCustomers", V.Local.sFilter, V.Local.sFilter)
+	F.Intrinsic.Control.If(V.Local.sFilter.IsNoReturn)
+		F.Data.DataTable.AddRow("dtCustomers", "From", V.Screen.FormCustChangeReport!txtCustFrom.Text.Trim, "To", V.Screen.FormCustChangeReport!txtCustTo.Text.Trim)
+	F.Intrinsic.Control.EndIf
+	GUI.FormCustChangeReport.txtCustFrom.Text("")
+	GUI.FormCustChangeReport.txtCustTo.Text("")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdAdd_Click.End
+
+Program.Sub.cmdRemove_Click.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'remove the selected row
+V.Local.sSelected.Declare(String)
+GUI.FormCustChangeReport.gsgcCustomers.GetSelectedRows("gvCustomers", V.Local.sSelected)
+
+F.Intrinsic.Control.If(V.Local.sSelected.Trim, !=, "")
+	F.Data.DataTable.DeleteRow("dtCustomers", V.Local.sSelected)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdRemove_Click.End
+
+Program.Sub.chkAllCustomers_Click.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'toggle controls
+V.Local.bEnable.Declare(Boolean)
+V.Local.bEnable.Set(V.Screen.FormCustChangeReport!chkAllCustomers.CheckedAsBoolean)
+GUI.FormCustChangeReport.cmdAdd.Enabled(V.Local.bEnable.Not)
+GUI.FormCustChangeReport.cmdRemove.Enabled(V.Local.bEnable.Not)
+GUI.FormCustChangeReport.cmdCustFrom.Enabled(V.Local.bEnable.Not)
+GUI.FormCustChangeReport.cmdCustTo.Enabled(V.Local.bEnable.Not)
+GUI.FormCustChangeReport.gsgcCustomers.Enabled(V.Local.bEnable.Not)
+GUI.FormCustChangeReport.txtCustFrom.Enabled(V.Local.bEnable.Not)
+GUI.FormCustChangeReport.txtCustTo.Enabled(V.Local.bEnable.Not)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.chkAllCustomers_Click.End
+
+Program.Sub.cmdPrint_Click.Start
+F.Intrinsic.Control.Try
+V.Local.sError.Declare
+
+'get the filtered data, print the report
+GUI.FormCustChangeReport..Enabled(False)
+
+V.Local.iBIRunID.Declare(Long)
+V.Local.iLogID.Declare(Long)
+F.Global.BI.GetRunID(V.Local.iBIRunID)
+F.Global.BI.StartLogging(V.Local.iBIRunID, -1, -1, "", V.Local.iLogID)
+
+V.Local.sDateFilter.Declare(String)
+V.Local.sCustomerFilter.Declare(String)
+V.Local.sFieldFilter.Declare(String)
+V.Local.iCounter.Declare(Long)
+V.Local.iJ.Declare(Long)
+V.Local.sSQL.Declare(String)
+V.Local.sRet.Declare(String)
+V.Local.sWhere.Declare(String)
+V.Local.sAnd1.Declare(String)
+V.Local.sAnd2.Declare(String)
+V.Local.sConvert.Declare(String)
+V.Local.dStartDate.Declare(Date)
+V.Local.dEndDate.Declare(Date)
+V.Local.sParamNames.Declare(String)
+V.Local.sParamVals.Declare(String)
+V.Local.sTConvert.Declare(String)
+V.Local.sTemp.Declare(String)
+V.Local.sTimeTemp.Declare(String)
+V.Local.sDateTemp.Declare(String)
+V.Local.dDate.Declare(Date)
+
+F.ODBC.Connection!Con.OpenCompanyConnection
+
+'set customer filter
+'If all customers is checked, ignore, else build the filter String
+'Loop through datatable, if single entry add it, if range get the range from the database and add them
+F.Intrinsic.Control.If(V.Screen.FormCustChangeReport!chkAllCustomers.CheckedAsBoolean.Not)
+	F.Intrinsic.Control.For(V.Local.iCounter, 0, V.DataTable.dtCustomers.RowCount--, 1)
+		F.Intrinsic.Control.If(V.DataTable.dtCustomers(V.Local.iCounter).From!FieldValTrim, =, V.DataTable.dtCustomers(V.Local.iCounter).To!FieldValTrim)
+			F.Intrinsic.String.Build("{0}Cust = '{1}'", V.Local.sCustomerFilter, V.DataTable.dtCustomers(V.Local.iCounter).From!FieldValTrim, V.Local.sCustomerFilter)
+		F.Intrinsic.Control.Else
+			'Get the range of customers
+			F.Intrinsic.String.Build("select CUSTOMER from V_Customer_Master where CUSTOMER >= '{0}' and CUSTOMER <= '{1}' order by CUSTOMER", V.DataTable.dtCustomers(V.Local.iCounter).From!FieldValTrim, V.DataTable.dtCustomers(V.Local.iCounter).To!FieldValTrim, V.Local.sSQL)
+			F.ODBC.Connection!Con.ExecuteAndReturn(V.Local.sSQL, V.Local.sRet)
+			
+			F.Intrinsic.String.Split(V.Local.sRet, "#$#", V.Local.sRet)		
+			F.Intrinsic.Control.For(V.Local.iJ, 0, V.Local.sRet.UBound, 1)
+				F.Intrinsic.String.Build("{0}Cust = '{1}'", V.Local.sCustomerFilter, V.Local.sRet(V.Local.iJ).Trim, V.Local.sCustomerFilter)
+				F.Intrinsic.Control.If(V.Local.iJ, !=, V.Local.sRet.UBound)
+					F.Intrinsic.String.Build("{0} or ", V.Local.sCustomerFilter, V.Local.sCustomerFilter)
+				F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.Next(V.Local.iJ)
+		F.Intrinsic.Control.EndIf
+		
+		F.Intrinsic.Control.If(V.Local.iCounter, !=, V.DataTable.dtCustomers.RowCount--)
+			F.Intrinsic.String.Build("{0} or ", V.Local.sCustomerFilter, V.Local.sCustomerFilter)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.Next(V.Local.iCounter)
+	
+	F.Intrinsic.Control.If(V.Local.sCustomerFilter.Trim, =, "")
+		V.Local.sCustomerFilter.Set("CUST = ''")
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+
+F.Data.DataTable.Close("dtCustomers")
+
+'Build field filter
+F.Intrinsic.Control.If(V.Screen.FormCustChangeReport!ddlFields.Value.Trim, !=, "All Fields")
+	F.Intrinsic.Control.SelectCase(V.Screen.FormCustChangeReport!ddlFields.Value.Trim)
+		F.Intrinsic.Control.Case("Bill To")
+			V.Local.sFieldFilter.Set("COLUMNNAME = 'BillToCompanyName' or COLUMNNAME = 'BillToAddress1' or COLUMNNAME = 'BillToAddress2' or COLUMNNAME = 'BillToCity' or COLUMNNAME = 'BillToState' or COLUMNNAME = 'BillToZip' or COLUMNNAME = 'BillToAttention'")
+		F.Intrinsic.Control.Case("Ship To")
+			V.Local.sFieldFilter.Set("COLUMNNAME = 'ShipToCompanyName' or COLUMNNAME = 'ShipToAddress1' or COLUMNNAME = 'ShipToAddress2' or COLUMNNAME = 'ShipToCity' or COLUMNNAME = 'ShipToState' or COLUMNNAME = 'ShipToZip' or COLUMNNAME = 'ShipToAttention'")
+		F.Intrinsic.Control.CaseElse
+			F.Intrinsic.String.Replace(V.Screen.FormCustChangeReport!ddlFields.Value.Trim, " ", "", V.Local.sFieldFilter)
+			F.Intrinsic.String.Build("COLUMNNAME = '{0}'", V.Local.sFieldFilter, V.Local.sFieldFilter)
+	F.Intrinsic.Control.EndSelect
+F.Intrinsic.Control.EndIf
+
+'Now get the filtered information
+F.Intrinsic.Control.If(V.Local.sCustomerFilter, !=, "", or, V.Local.sDateFilter, !=, "", V.Local.sFieldFilter, !=, "")
+	V.Local.sWhere.Set(" WHERE ")
+	
+	F.Intrinsic.Control.If(V.Local.sDateFilter, !=, "", and, V.Local.sCustomerFilter, !=, "")
+		V.Local.sAnd1.Set(" AND ")
+	F.Intrinsic.Control.EndIf
+	
+	F.Intrinsic.Control.If(V.Local.sCustomerFilter, !=, "", and, V.Local.sFieldFilter, !=, "")
+		V.Local.sAnd2.Set(" AND ")
+	F.Intrinsic.Control.EndIf
+	
+	F.Intrinsic.Control.If(V.Local.sDateFilter, !=, "", and, V.Local.sFieldFilter, !=, "")
+		V.Local.sAnd1.Set(" AND ")
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+
+'converting date and time from string for sort
+V.Local.sConvert.Set(",  CONVERT('1900-01-01', SQL_DATE) as DDATE")
+V.Local.sTConvert.Set(", '12:00:00 AM' as TTIME")
+
+'delete old report info
+F.Intrinsic.String.Build("delete from GCG_5301_5129REPORT where Terminal = '{0}'", V.Caller.Terminal, V.Local.sSQL)
+F.ODBC.Connection!Con.Execute(V.Local.sSQL)
+
+F.Intrinsic.String.Build("select CUST, USER1 as UNAME, RTRIM(COLUMNNAME) as FIELD, RTRIM(OLDVALUE) as OLD, RTRIM(NEWVALUE) as NEW, RTRIM(DATECHANGED) as FULLDATE{5}{6} from GCG_5129_CUSTCHANGES{0}{1}{2}{3}{4}", V.Local.sWhere, V.Local.sAnd1, V.Local.sCustomerFilter, V.Local.sAnd2, V.Local.sFieldFilter, V.Local.sConvert, V.Local.sTConvert, V.Local.sSQL)
+
+F.Data.DataTable.CreateFromSQL("dtFilteredData", "Con", V.Local.sSQL)
+F.Data.DataTable.AddColumn("dtFilteredData", "TERMINAL", "String", V.Caller.Terminal)
+
+'I hate dates
+F.Intrinsic.Control.For(V.Local.iCounter, 0, V.DataTable.dtFilteredData.RowCount--, 1)
+	V.Local.sTemp.Set(V.DataTable.dtFilteredData(V.Local.iCounter).FULLDATE!FieldValTrim)
+	F.Intrinsic.String.Split(V.Local.sTemp, " ", V.Local.sTemp)
+	V.Local.sDateTemp.Set(V.Local.sTemp(0))
+	F.Intrinsic.String.Build("{0} {1}", V.Local.sTemp(1), V.Local.sTemp(2), V.Local.sTimeTemp)
+	V.Local.sTemp.Redim(0,0)
+	F.Intrinsic.Date.ConvertDString(V.Local.sDateTemp, "MM/DD/YYYY", V.Local.dDate)
+	F.Data.DataTable.SetValue("dtFilteredData", V.Local.iCounter, "DDATE", V.Local.dDate.FormatYYYY-MM-DD, "TTIME", V.Local.sTimeTemp)
+F.Intrinsic.Control.Next(V.Local.iCounter)
+
+F.Data.DataView.Create("dtFilteredData", "dvFilteredData")
+
+'Set date filter
+F.Intrinsic.Control.If(V.Screen.FormCustChangeReport!chkAllDates.CheckedAsBoolean.Not)
+	V.Local.dStartDate.Set(V.Screen.FormCustChangeReport!dtpFrom.Value)
+	V.Local.dEndDate.Set(V.Screen.FormCustChangeReport!dtpTo.Value)
+	F.Intrinsic.String.Build("DDATE >= '{0}' and DDATE <= '{1}'", V.Local.dStartDate.FormatYYYY-MM-DD, V.Local.dEndDate.FormatYYYY-MM-DD, V.Local.sDateFilter)
+	F.Data.DataView.SetFilter("dtFilteredData", "dvFilteredData", V.Local.sDateFilter)
+F.Intrinsic.Control.EndIf
+
+'turn this to a datatable then save to db
+F.Data.DataView.ToDataTable("dtFilteredData", "dvFilteredData", "dtFinalData")
+F.Data.DataTable.Close("dtFilteredData")
+
+F.Data.DataTable.SaveToDB("dtFinalData", "Con", "GCG_5301_5129REPORT", "ID", 128)
+
+F.Data.DataTable.Close("dtFinalData")
+F.ODBC.Connection!Con.Close
+
+V.Local.sParamNames.Set("TERMINAL")
+V.Local.sParamVals.Set(V.Caller.Terminal)
+F.Global.BI.StopLogging(V.Local.iLogID)
+
+GUI.FormCustChangeReport..Visible(False)
+F.Global.BI.RunReportPreProcessor(V.Local.iBIRunID, V.Local.iLogID, V.Local.sParamNames, V.Local.sParamVals, "", -1, True, "", -1, "", -1, "", "", V.Local.iBIRunID)
+
+F.Intrinsic.Control.CallSub(FormCustChangeReport_UnLoad)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End 
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdPrint_Click.End
